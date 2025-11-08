@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Aventour.Application\Aventour.Application.csproj" />
+      <ProjectReference Include="..\Aventour.Domain\Aventour.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
