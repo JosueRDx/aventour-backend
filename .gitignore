@@ -1,0 +1,76 @@
+############################
+# IDEs (Rider, VS, VSCode)
+############################
+.idea/
+.vscode/
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+
+############################
+# Build de .NET / C#
+############################
+bin/
+obj/
+out/
+publish/
+[Bb]uild/
+[Ll]og/
+
+############################
+# Archivos temporales
+############################
+*.tmp
+*.log
+*.cache
+*.db
+*.db-shm
+*.db-wal
+*.pid
+*.seed
+
+############################
+# Sistema operativo
+############################
+.DS_Store
+Thumbs.db
+
+############################
+# Paquetes y dependencias
+############################
+packages/
+*.nupkg
+*.snupkg
+
+############################
+# Configuración sensible
+############################
+*.env
+*.key
+*.pfx
+*.cer
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+
+!appsettings.json
+
+############################
+# Entity Framework / SQLite
+############################
+*.db
+Migrations/
+
+############################
+# Docker
+############################
+docker-compose.override.yml
+
+############################
+# Otros opcionales
+############################
+*.bak
+*.swp
+*.orig
