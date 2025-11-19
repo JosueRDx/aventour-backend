@@ -1,15 +1,17 @@
 using Aventour.Application.Configuration; // Para AddApplicationServices
 using Aventour.Infrastructure.Configuration; // Para AddInfrastructureServices
 
+// ...
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Registrar servicios de Infraestructura (DB, Repositorios)
-builder.Services.AddInfrastructureServices(builder.Configuration);
+// Registrar servicios de Infraestructura (DB, Repositorios) de monento nada 
+//builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// Registrar servicios de Aplicación (MediatR, CQRS Handlers)
-builder.Services.AddApplicationServices();
+// Registrar servicios de Aplicación (MediatR, CQRS Handlers) de monento nada 
+//builder.Services.AddApplicationServices();
 
 
 // Configuración de Swagger/OpenAPI
