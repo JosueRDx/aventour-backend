@@ -2,7 +2,7 @@
 using Aventour.Application.Interfaces.Services;
 using Aventour.Application.Interfaces.Utilities;
 using Aventour.Domain.Interfaces;
-using Aventour.Domain.Models; // Aquí usamos la Entidad (Usuario)
+using Aventour.Domain.Models;
 
 namespace Aventour.Application.Services;
 
@@ -10,15 +10,16 @@ public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
-    // private readonly ITokenGenerator _tokenGenerator; // Requerirías un servicio similar para JWTs
-    // private readonly IEmailService _emailService; // Requerirías un servicio similar para emails
+    private readonly IJwtProvider _jwtProvider;
 
-    public AuthService(IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+    public AuthService(
+        IUnitOfWork unitOfWork, 
+        IPasswordHasher passwordHasher,
+        IJwtProvider jwtProvider)
     {
         _unitOfWork = unitOfWork;
         _passwordHasher = passwordHasher;
-        // _tokenGenerator = tokenGenerator;
-        // _emailService = emailService;
+        _jwtProvider = jwtProvider;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegistroUsuarioDto dto)
@@ -32,9 +33,9 @@ public class AuthService : IAuthService
 
         // 2. Hashing de Contraseña
         var passwordHash = _passwordHasher.Hash(dto.Password);
-        var confirmationToken = Guid.NewGuid().ToString(); // Generar un token para confirmación de correo
+        var confirmationToken = Guid.NewGuid().ToString();
         
-        // 3. Mapeo DTO -> Entidad (Manual, en un proyecto real se usaría AutoMapper)
+        // 3. Mapeo DTO -> Entidad
         var newUser = new Usuario
         {
             Nombres = dto.Nombres,
@@ -46,12 +47,12 @@ public class AuthService : IAuthService
             FechaRegistro = DateTime.UtcNow,
             EsAdministrador = false,
             TokenConfirmacion = confirmationToken,
-            SesionActiva = true // Para fines de demostración, se activa inmediatamente
+            SesionActiva = true 
         };
 
-        // 4. Persistencia de datos (Llamada al Unit of Work)
+        // 4. Persistencia de datos
         await _unitOfWork.Usuarios.AddAsync(newUser);
-        await _unitOfWork.CompleteAsync(); // Guardar cambios
+        await _unitOfWork.CompleteAsync(); 
 
         // 5. Mapeo Entidad -> Response DTO
         var userResponse = new UsuarioResponseDto
@@ -66,21 +67,21 @@ public class AuthService : IAuthService
             EsAdministrador = newUser.EsAdministrador ?? false
         };
 
-        // 6. Generar Token y Response
-        // var tokenResult = _tokenGenerator.GenerateToken(userResponse);
+        // 6. Generar Token Real
+        var token = _jwtProvider.Generate(userResponse);
         
         return new AuthResponseDto
         {
             Usuario = userResponse,
-            Token = "JWT_TOKEN_GENERADO_AQUI", // Placeholder
-            ExpiracionToken = DateTime.UtcNow.AddHours(1), // Placeholder
+            Token = token,
+            ExpiracionToken = DateTime.UtcNow.AddHours(2),
             EsRegistroExitoso = true
         };
     }
 
     public async Task<AuthResponseDto> LoginAsync(LoginUsuarioDto dto)
     {
-        // 1. Validar credenciales: Buscar usuario por email
+        // 1. Validar credenciales
         var user = await _unitOfWork.Usuarios.GetByEmailAsync(dto.Email);
         
         if (user == null)
@@ -94,7 +95,7 @@ public class AuthService : IAuthService
             throw new UnauthorizedAccessException("Credenciales inválidas.");
         }
         
-        // 3. Mapeo y Generación de Token (similar al registro)
+        // 3. Mapeo y Generación de Token
         var userResponse = new UsuarioResponseDto
         {
             IdUsuario = user.IdUsuario,
@@ -107,50 +108,29 @@ public class AuthService : IAuthService
             EsAdministrador = user.EsAdministrador ?? false
         };
 
-        // 4. Actualizar estado de sesión y Guardar (si es necesario)
-        // user.SesionActiva = true; 
-        // _unitOfWork.Usuarios.Update(user);
-        // await _unitOfWork.CompleteAsync();
+        var token = _jwtProvider.Generate(userResponse);
 
         return new AuthResponseDto
         {
             Usuario = userResponse,
-            Token = "JWT_TOKEN_GENERADO_AQUI", // Placeholder
-            ExpiracionToken = DateTime.UtcNow.AddHours(1), // Placeholder
+            Token = token,
+            ExpiracionToken = DateTime.UtcNow.AddHours(2),
             EsRegistroExitoso = true
         };
     }
     
-    // ... Implementación de UpdateProfileAsync, RequestPasswordResetAsync, ResetPasswordAsync ...
-    
     public Task<UsuarioResponseDto> UpdateProfileAsync(int userId, ActualizarPerfilDto dto)
     {
-        // Lógica: 
-        // 1. Obtener usuario por ID.
-        // 2. Aplicar cambios del DTO.
-        // 3. Llamar a _unitOfWork.Usuarios.Update(user);
-        // 4. Llamar a _unitOfWork.CompleteAsync();
-        // 5. Mapear y devolver el UsuarioResponseDto actualizado.
         throw new NotImplementedException();
     }
     
     public Task<bool> RequestPasswordResetAsync(string email)
     {
-         // Lógica: 
-        // 1. Buscar usuario por email.
-        // 2. Generar un Token de Recuperación único.
-        // 3. Guardar el token en el campo TokenConfirmacion del Usuario.
-        // 4. Enviar email al usuario con el link que contiene el token.
         throw new NotImplementedException();
     }
 
     public Task<bool> ResetPasswordAsync(string token, string newPassword)
     {
-        // Lógica: 
-        // 1. Buscar usuario por TokenConfirmacion.
-        // 2. Verificar la validez del token (caducidad, etc.).
-        // 3. Hashear newPassword.
-        // 4. Actualizar PasswordHash y limpiar TokenConfirmacion.
         throw new NotImplementedException();
     }
 }

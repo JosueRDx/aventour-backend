@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
- 
+
 // Asume que tus Interfaces de Repositorio están en: Aventour.Domain.Interfaces
 // using Aventour.Domain.Interfaces; 
 
@@ -46,6 +46,9 @@ namespace Aventour.Infrastructure.Configuration
             
             // 3. Registro de Utilidades y Adaptadores
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+            // --- AQUI AGREGAMOS LA NUEVA INYECCION PARA JWT ---
+            services.AddSingleton<IJwtProvider, JwtProvider>();
     
             // ** NUEVO: Registro del Exportador Excel **
             services.AddScoped<IExcelExporter, ClosedXmlExporter>();
