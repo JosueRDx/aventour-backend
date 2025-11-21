@@ -1,8 +1,11 @@
 ﻿// Proyecto: Aventour.Infrastructure
 // Archivo: Configuration/InfrastructureServicesExtension.cs
 
+using Aventour.Application.Interfaces.Utilities;
 using Aventour.Domain.Interfaces;
+using Aventour.Infrastructure.Authentication;
 using Aventour.Infrastructure.Repositories;
+using Aventour.Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +43,12 @@ namespace Aventour.Infrastructure.Configuration
             // 2. Registro del Patrón Unit of Work
             // Este es el punto principal de inyección para la capa Application
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            // 3. Registro de Utilidades y Adaptadores
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+    
+            // ** NUEVO: Registro del Exportador Excel **
+            services.AddScoped<IExcelExporter, ClosedXmlExporter>();
             return services;
         }
     }
