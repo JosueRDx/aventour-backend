@@ -1,5 +1,6 @@
 ﻿using Aventour.Domain.Interfaces;
 using Aventour.Domain.Models;
+using Aventour.Infrastructure.Persistence;
 
 namespace Aventour.Infrastructure.Repositories;
 

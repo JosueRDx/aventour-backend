@@ -1,4 +1,5 @@
 ﻿using Aventour.Domain.Interfaces;
+using Aventour.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

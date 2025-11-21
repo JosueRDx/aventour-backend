@@ -1,5 +1,6 @@
 ﻿using Aventour.Domain.Interfaces;
 using Aventour.Domain.Models;
+using Aventour.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aventour.Infrastructure.Repositories;

@@ -4,6 +4,7 @@
 using Aventour.Application.Interfaces.Utilities;
 using Aventour.Domain.Interfaces;
 using Aventour.Infrastructure.Authentication;
+using Aventour.Infrastructure.Persistence;
 using Aventour.Infrastructure.Repositories;
 using Aventour.Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
