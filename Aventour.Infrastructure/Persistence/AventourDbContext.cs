@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Aventour.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Aventour.Domain.Models;
 
 public partial class AventourDbContext : DbContext
 {
