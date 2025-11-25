@@ -31,6 +31,10 @@ namespace Aventour.Application.Configuration
         
             // 2. Registro de Servicios de Administración (Específicos para Admin)
             services.AddScoped<IAgenciaAdminService, AgenciaAdminService>();
+            
+            
+            // ** NUEVO: Módulo de Perfil de Usuario **
+            services.AddScoped<IUsuarioService, UsuarioService>();
             return services;
         }
     }
