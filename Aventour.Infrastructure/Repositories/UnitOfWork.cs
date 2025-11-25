@@ -7,9 +7,11 @@ namespace Aventour.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AventourDbContext _context;
-    
+    private IFavoritoRepository _favoritos;
+
     // Propiedades privadas para asegurar la inicialización diferida (opcional) o simple
     // o para asegurar que solo una instancia de cada repositorio se crea por UoW.
+    public IAgenciaRepository Agencias { get; }
     public IUsuarioRepository Usuarios { get; }
     public IDestinoTuristicoRepository DestinosTuristicos { get; }
     public IResenaRepository Resenas { get; }
@@ -21,6 +23,9 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<PacksRutasAgencium> PacksRutasAgencia { get; }
     public IGenericRepository<DetallePackDestino> DetallePackDestinos { get; }
     public IGenericRepository<HotelesRestaurante> HotelesRestaurantes { get; }
+
+    IFavoritoRepository IUnitOfWork.Favoritos => _favoritos;
+
     public IGenericRepository<Favorito> Favoritos { get; }
 
 

@@ -1,7 +1,10 @@
 ﻿namespace Aventour.Domain.Models;
 
 public partial class DestinosTuristico
+
 {
+    
+   
     public int IdDestino { get; set; }
 
     public string Nombre { get; set; } = null!;

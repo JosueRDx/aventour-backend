@@ -4,22 +4,17 @@ using Aventour.Domain.Models;
 
 namespace Aventour.Domain.Interfaces;
 
-/// <summary>
-/// Define la Unidad de Trabajo que agrupa todos los repositorios y gestiona la transacción de la base de datos.
-/// Esto asegura que todos los cambios en una operación de negocio sean atómicos (transacciones).
-/// </summary>
 public interface IUnitOfWork : IDisposable
 {
-    // --- Propiedades para acceder a todos los repositorios específicos ---
-    
-    // Repositorios Core:
+    // ... (Mantener IAgenciaRepository Agencias y IUsuarioRepository Usuarios)
+    IAgenciaRepository Agencias { get; }
     IUsuarioRepository Usuarios { get; }
     IDestinoTuristicoRepository DestinosTuristicos { get; }
     IResenaRepository Resenas { get; }
 
     // Repositorios de Proveedores:
-    IAgenciaGuiaRepository AgenciasGuias { get; }
-
+    IAgenciaGuiaRepository AgenciasGuias { get; } // Asumiendo que esta existe
+    
     // Repositorios de Rutas:
     IGenericRepository<RutasPersonalizada> RutasPersonalizadas { get; }
     IGenericRepository<DetalleRuta> DetalleRutas { get; }
@@ -28,26 +23,13 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<PacksRutasAgencium> PacksRutasAgencia { get; }
     IGenericRepository<DetallePackDestino> DetallePackDestinos { get; }
 
-    // Repositorios de Lugares/Favoritos (Usando el genérico si no requieren lógica específica compleja):
+    // Repositorios de Lugares/Favoritos:
     IGenericRepository<HotelesRestaurante> HotelesRestaurantes { get; }
-    IGenericRepository<Favorito> Favoritos { get; }
     
+    // **CORRECCIÓN:** Debe ser la interfaz específica (IFavoritoRepository)
+    // para exponer los métodos como GetByKeysAsync y GetByUserAsync.
+    IFavoritoRepository Favoritos { get; }
     
-    
-    
-    
-    
-    // ----------------------------------------------------------------------
-
-    /// <summary>
-    /// Guarda de forma asíncrona todos los cambios realizados en el contexto.
-    /// Representa la confirmación de la transacción.
-    /// </summary>
-    /// <returns>El número de objetos escritos en la base de datos.</returns>
     Task<int> CompleteAsync();
-    
-    /// <summary>
-    /// Método para descartar o liberar recursos no gestionados.
-    /// </summary>
     new void Dispose();
 }
