@@ -5,6 +5,7 @@ namespace Aventour.Domain.Enums
     public enum TipoAgenciaGuia
     {
         // El nombre en C# es Agencia, en BD es 'Agencia' (coinciden)
+        [PgName("Agencia")] 
         Agencia,
         
         // El nombre en C# es Guia, pero en BD es 'Guía' (con tilde)
