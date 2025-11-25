@@ -1,6 +1,8 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models; 
-using Aventour.Application.Configuration; // Para AddApplicationServices
+using Aventour.Application.Configuration;
+using Aventour.Application.Interfaces.Services;
+using Aventour.Application.Services; // Para AddApplicationServices
 using Aventour.Infrastructure.Configuration; // Para AddInfrastructureServices
 
 // 1. Definir la política CORS
@@ -14,6 +16,8 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // Registrar servicios de Aplicación (MediatR, CQRS Handlers) de monento nada 
 builder.Services.AddApplicationServices();
+
+builder.Services.AddScoped<IReporteService, ReporteService>();
 
 
 // Configuración de Swagger/OpenAPI
