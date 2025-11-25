@@ -33,4 +33,19 @@ public class ResenaRepository : GenericRepository<Resena>, IResenaRepository
     {
         return await _dbSet.AnyAsync(r => r.IdUsuario == idUsuario && r.IdEntidad == idEntidad);
     }
+
+    public Task<IEnumerable<Resena>> GetResenasByEntityIdAsync(int idEntidad)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<(decimal Media, int Count)> CalculateAverageRatingAsync(int idEntidad)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Resena?> GetByUserAndEntityAsync(int userId, int idEntidad)
+    {
+        throw new NotImplementedException();
+    }
 }

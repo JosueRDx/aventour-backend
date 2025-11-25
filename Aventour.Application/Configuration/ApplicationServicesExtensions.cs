@@ -35,6 +35,12 @@ namespace Aventour.Application.Configuration
             
             // ** NUEVO: Módulo de Perfil de Usuario **
             services.AddScoped<IUsuarioService, UsuarioService>();
+            
+            // ** NUEVO: Módulo de Favoritos **
+            services.AddScoped<IFavoritoService, FavoritoService>();
+            
+            // ** NUEVO: Módulo de Reseñas **
+            services.AddScoped<IResenaService, ResenaService>();
             return services;
         }
     }

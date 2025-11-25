@@ -5,22 +5,19 @@ namespace Aventour.Domain.Interfaces;
 public interface IResenaRepository : IGenericRepository<Resena>
 {
     /// <summary>
-    /// Obtiene todas las reseñas para una entidad específica (Destino, Agencia, Guía, etc.).
+    /// Soluciona 'GetResenasByEntityIdAsync' (Línea 153 en ResenaService)
     /// </summary>
-    /// <param name="idEntidad">ID de la entidad reseñada.</param>
-    /// <returns>Una colección de Reseñas.</returns>
-    Task<IEnumerable<Resena>> GetByEntityIdAsync(int idEntidad);
+    Task<IEnumerable<Resena>> GetResenasByEntityIdAsync(int idEntidad);
 
     /// <summary>
-    /// Calcula y devuelve la puntuación media de una entidad específica.
+    /// Soluciona 'CalculateAverageRatingAsync' (Línea 40 y 159 en ResenaService).
+    /// El servicio espera una tupla (media, conteo).
     /// </summary>
-    /// <param name="idEntidad">ID de la entidad.</param>
-    /// <returns>La puntuación media (decimal).</returns>
-    Task<decimal> GetAverageScoreAsync(int idEntidad);
+    Task<(decimal Media, int Count)> CalculateAverageRatingAsync(int idEntidad);
 
     /// <summary>
-    /// Verifica si un usuario ya ha dejado una reseña para una entidad específica.
+    /// Soluciona 'GetByUserAndEntityAsync' (Línea 58 en ResenaService).
+    /// El servicio espera la Reseña para verificar si existe (!= null).
     /// </summary>
-    /// <returns>True si existe una reseña previa.</returns>
-    Task<bool> HasUserReviewedAsync(int idUsuario, int idEntidad);
+    Task<Resena?> GetByUserAndEntityAsync(int userId, int idEntidad);
 }
