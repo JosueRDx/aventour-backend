@@ -1,6 +1,6 @@
 ﻿using Aventour.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Aventour.Domain.Enums;
 namespace Aventour.Infrastructure.Persistence;
 
 public partial class AventourDbContext : DbContext
@@ -37,8 +37,8 @@ public partial class AventourDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresEnum<TipoAgenciaGuia>("tipo_agencia_guia");
         modelBuilder
-            .HasPostgresEnum("tipo_agencia_guia", new[] { "Agencia", "Guía" })
             .HasPostgresEnum("tipo_favorito", new[] { "Destino", "Lugar" })
             .HasPostgresEnum("tipo_hotel_rest", new[] { "Hotel", "Restaurante" })
             .HasPostgresEnum("tipo_resena", new[] { "Destino", "Agencia", "Guia" });

@@ -31,6 +31,8 @@ namespace Aventour.Application.Configuration
         
             // 2. Registro de Servicios de Administración (Específicos para Admin)
             services.AddScoped<IAgenciaAdminService, AgenciaAdminService>();
+            
+            services.AddScoped<IGuiaService, GuiaService>();
             return services;
         }
     }

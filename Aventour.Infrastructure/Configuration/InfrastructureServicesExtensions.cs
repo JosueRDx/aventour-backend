@@ -1,7 +1,5 @@
-﻿// Proyecto: Aventour.Infrastructure
-// Archivo: Configuration/InfrastructureServicesExtension.cs
-
-using Aventour.Application.Interfaces.Utilities;
+﻿using Aventour.Application.Interfaces.Utilities;
+using Aventour.Domain.Enums;
 using Aventour.Domain.Interfaces;
 using Aventour.Infrastructure.Authentication;
 using Aventour.Infrastructure.Persistence;
@@ -10,10 +8,7 @@ using Aventour.Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-
-// Asume que tus Interfaces de Repositorio están en: Aventour.Domain.Interfaces
-// using Aventour.Domain.Interfaces; 
+using Npgsql;
 
 namespace Aventour.Infrastructure.Configuration
 {
@@ -23,36 +18,33 @@ namespace Aventour.Infrastructure.Configuration
             this IServiceCollection services, 
             IConfiguration configuration)
         {
-            // --- 1. CONEXIÓN A LA BASE DE DATOS (RENDER) ---
             var connectionString = configuration.GetConnectionString("PostgresConnection");
-            
+
+            // 1. Configuración del DbContext con mapeo de Enums Directo
             services.AddDbContext<AventourDbContext>(options =>
-                // Usar la cadena de Render y el proveedor Npgsql
-                options.UseNpgsql(connectionString)
+                options.UseNpgsql(connectionString, o => 
+                {
+                    // Aquí le decimos explícitamente a EF/Npgsql que trate estos tipos como Enums
+                    o.MapEnum<TipoAgenciaGuia>("tipo_agencia_guia");
+                    o.MapEnum<TipoResena>("tipo_resena");
+                    o.MapEnum<TipoFavorito>("tipo_favorito");
+                    o.MapEnum<TipoHotelRest>("tipo_hotel_rest");
+                })
             );
 
-            // 1. Registro del Patrón Repository (Adaptadores)
-            // Registro del Genérico
+            // 2. Registro de Repositorios
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-            // Registro de los Específicos
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IDestinoTuristicoRepository, DestinoTuristicoRepository>();
             services.AddScoped<IAgenciaGuiaRepository, AgenciaGuiaRepository>();
             services.AddScoped<IResenaRepository, ResenaRepository>();
 
-            // 2. Registro del Patrón Unit of Work
-            // Este es el punto principal de inyección para la capa Application
+            // 3. Registro de Unit of Work y Servicios
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
-            // 3. Registro de Utilidades y Adaptadores
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
-
-            // --- AQUI AGREGAMOS LA NUEVA INYECCION PARA JWT ---
             services.AddSingleton<IJwtProvider, JwtProvider>();
-    
-            // ** NUEVO: Registro del Exportador Excel **
             services.AddScoped<IExcelExporter, ClosedXmlExporter>();
+
             return services;
         }
     }
